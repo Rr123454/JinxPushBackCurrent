@@ -1,5 +1,6 @@
 #include "main.h"
 #include "EZ-Template/util.hpp"
+#include "autons.hpp"
 #include "pros/misc.h"
 using namespace pros;
 using namespace ez;
@@ -129,6 +130,27 @@ void competition_initialize() {
  * will be stopped. Re-enabling the robot will restart the task, not re-start it
  * from where it left off.
  */
+
+ void red_left()
+{
+  //fill code here
+}
+
+void red_right()
+{
+  //fill code here
+}
+
+void blue_left()
+{
+  //fill code here
+}
+
+void blue_right()
+{
+  //fill code here
+}
+
 void autonomous() {
   chassis.pid_targets_reset();                // Resets PID targets to 0
   chassis.drive_imu_reset();                  // Reset gyro position to 0
@@ -148,9 +170,18 @@ void autonomous() {
   You can do cool curved motions, but you have to give your robot the best chance
   to be consistent
   */
+  
+  // choose 1, comment the rest
+  red_left();
+  red_right();
+  blue_left();
+  blue_right();
 
-  ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+
+  //ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
+
+
 
 /**
  * Simplifies printing tracker values to the brain screen
