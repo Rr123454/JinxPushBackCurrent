@@ -149,14 +149,7 @@ void autonomous() {
   to be consistent
   */
 
-  
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  //chassis.pid_odom_set(24_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-  ez::screen_print("POSITION: " + std::to_string(chassis.odom_x_get()) + " " + std::to_string((chassis.odom_y_get())) + " " + std::to_string((chassis.odom_theta_get())), 1);
-  //printf("POSITION", chassis.odom_x_get(), chassis.odom_y_get(), chassis.odom_theta_get());
-
-  //ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
+  ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
 /**
