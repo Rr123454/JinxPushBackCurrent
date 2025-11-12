@@ -12,8 +12,8 @@ using namespace ez;
 
 
 const int IN_SPEED = 100;
-const int DRIVE_SPEED = 30;
-const int TURN_SPEED = 90;
+const int DRIVE_SPEED = 60;
+const int TURN_SPEED = 60;
 const int SWING_SPEED = 110;
 const int timing = 1000;
 
@@ -325,12 +325,13 @@ void outtake(){
 void pushback_auton_full(){
   // Intake the first one 
   intake_move();
+  chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
   delay(timing);
   intake_stop();
 
   // Drive to first group of blocks
-  chassis.pid_drive_set(34.646_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  chassis.pid_drive_set(18_in, DRIVE_SPEED, true);
+  delay(timing);
 
   // Intake the 3 
   intake_move();
@@ -339,10 +340,10 @@ void pushback_auton_full(){
 
   // Turn towards the first goal
   chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
+  delay(timing);
 
-  chassis.pid_drive_set(26.772_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  chassis.pid_drive_set(12_in, DRIVE_SPEED, true);
+  delay(timing);
 
   // Outake three
   lift.set_value(true);
@@ -351,22 +352,22 @@ void pushback_auton_full(){
   intake_stop();
   lift.set_value(false);
   
-
+  
   // Move to next goal
   chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
+  delay(timing);
 
-  chassis.pid_drive_set(12.599_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
+  delay(timing);
 
   chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
+  delay(timing);
 
-  chassis.pid_drive_set(12.599_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
+  delay(timing);
 
   chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
+  delay(timing);
 
   // Outtake one
   outtake();
@@ -375,25 +376,25 @@ void pushback_auton_full(){
 
   // Take the 3 group 
   chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
+  delay(timing);
 
-  chassis.pid_drive_set(15.74_in, DRIVE_SPEED, true);  // All these angles and movements need to be tested with robot to be accurate
-  chassis.pid_wait();
+  chassis.pid_drive_set(9_in, DRIVE_SPEED, true);  // All these angles and movements need to be tested with robot to be accurate
+  delay(timing);
 
   intake_move();
   pros::delay(timing);
   intake_stop();
 
   chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
+  delay(timing);
 
-  chassis.pid_drive_set(36_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
+  chassis.pid_drive_set(20_in, DRIVE_SPEED, true);
+  delay(timing);
 
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(16_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
   chassis.pid_turn_set(45_deg, TURN_SPEED);
@@ -411,7 +412,7 @@ void pushback_auton_full(){
   chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(36_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(20_in, DRIVE_SPEED, true);
   chassis.pid_wait();
   
   // Pneumatic function
@@ -419,6 +420,7 @@ void pushback_auton_full(){
   outtake();
   intake_stop();
   lift.set_value(false);
+  
 
 }
 
