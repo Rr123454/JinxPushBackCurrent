@@ -12,9 +12,10 @@ using namespace ez;
 
 
 const int IN_SPEED = 100;
-const int DRIVE_SPEED = 110;
+const int DRIVE_SPEED = 30;
 const int TURN_SPEED = 90;
 const int SWING_SPEED = 110;
+const int timing = 1000;
 
 pros::MotorGroup intake({-4,-6}, pros::MotorGearset::blue);
 pros::adi::Pneumatics lift('a', true);
@@ -131,15 +132,35 @@ void competition_initialize() {
  * from where it left off.
  */
 
- void red_left()
-{
-  //fill code here
+void cross_side(){
+  
 }
 
-void red_right()
+void red_left()
 {
-  //fill code here
+  
 }
+
+
+/*void red_right()
+{
+  chassis.pid_targets_reset();
+  chassis.drive_imu_reset();
+  chassis.drive_sensor_reset();
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);
+  
+  // Drive forward toward the center barrier
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  intake_move();
+  chassis.pid_wait();
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+  chassis.pid_drive_set(36_in, DRIVE_SPEED, true);
+  outtake();
+}
+  */
 
 void blue_left()
 {
@@ -172,12 +193,12 @@ void autonomous() {
   */
   
   // choose 1, comment the rest
-  red_left();
-  red_right();
-  blue_left();
-  blue_right();
+  //red_left();
+  //red_right();
+  //blue_left();
+  //blue_right();
 
-
+  pushback_auton_full();
   //ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
@@ -203,6 +224,8 @@ void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int lin
  */
 void ez_screen_task() {
   while (true) {
+    pushback_auton_full();
+    
     // Only run this when not connected to a competition switch
     if (!pros::competition::is_connected()) {
       // Blank page for odom debugging
@@ -299,6 +322,105 @@ void outtake(){
   intake.move(-IN_SPEED);
 }
 
+void pushback_auton_full(){
+  // Intake the first one 
+  intake_move();
+  delay(timing);
+  intake_stop();
+
+  // Drive to first group of blocks
+  chassis.pid_drive_set(34.646_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  // Intake the 3 
+  intake_move();
+  delay(timing);
+  intake_stop();
+
+  // Turn towards the first goal
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(26.772_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  // Outake three
+  lift.set_value(true);
+  outtake();
+  delay(timing);
+  intake_stop();
+  lift.set_value(false);
+  
+
+  // Move to next goal
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(12.599_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(12.599_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  // Outtake one
+  outtake();
+  delay(timing);
+  intake_stop();
+
+  // Take the 3 group 
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(15.74_in, DRIVE_SPEED, true);  // All these angles and movements need to be tested with robot to be accurate
+  chassis.pid_wait();
+
+  intake_move();
+  pros::delay(timing);
+  intake_stop();
+
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(36_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(24_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(10_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  // Intake 3
+  intake_move();
+  pros::delay(timing);
+  intake_stop();
+
+  // Move to dropper
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(36_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+  
+  // Pneumatic function
+  lift.set_value(true);
+  outtake();
+  intake_stop();
+  lift.set_value(false);
+
+}
 
 void opcontrol() {
   // This is preference to what you like to drive on
